@@ -72,25 +72,22 @@ int main(void)
                 if (state == 0){
                     printString("Enter a command - (1) Select motor (2) Spin motor (x) Exit: \r\n");
                     //change state based on input
+                    waiting = 1;
                 }
                 else if (state == 1){
                     printString("Which motor? (1) U2 (2) U5\r\n");
                     //change motor bit
+                    waiting = 1;
                 }
                 else if (state == 2){
                     printString("Which direction? (1) Clockwise (2) Counterclockwise\r\n");
+                    waiting = 1;
                     //
                 }
-                else if (state == 3){
-                    printString("Which motor? (1) U2 (2) U5\r\n");                    //
-                }
-
-                printString("Which direction? (1) Clockwise (2) Counterclockwise\r\n");
-                waiting = 1;
 	        }
 	        else{
 	            if(!(response == '1' || response == '2' || response == 'x')){
-	                printString("Error! Incorrect choice\n");
+	                printString("Error! Incorrect choice\r\n");
 	                waiting = 0;
 	                state = 0;
 	            }
@@ -106,26 +103,17 @@ int main(void)
                     }
                     //change state based on input
                 }
-                else if (state == 1){
-                    state = 3;
-                    //change motor based on response
-                }
-                else if (state == 2){
-                    state = 4;
-                    //change spin dir var based on response
-                }
-                else if (state == 3){
-                    printString("Selected motor");
+	            else if (state == 1){
+                    printString("Selected motor\r\n");
                     state = 0;
                     //
                 }
-                else if (state == 4){
-                    printString("Spinning motor\n");
+                else if (state == 2){
+                    printString("Spinning motor\r\n");
                     //spin motor
                     state = 0;
                     //change motor bit
                 }
-	            waiting = 0;
 	            response = '\0';
 	        }
 
