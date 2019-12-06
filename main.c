@@ -12,6 +12,8 @@
 int waiting = 0;
 int state = 0;
 int execute = 1;
+int direction = 0;
+int motor = 0;
 char response = '\0';
 
 // Function Prototypes
@@ -56,6 +58,8 @@ int main(void)
 	// Loop forever
     //int motor = 0;
     //waitForTX();
+
+    StepMotor(1000, 1, 1);
 
 	while(execute == 1) {
 	    //StepMotor(10000);
@@ -104,14 +108,29 @@ int main(void)
                     //change state based on input
                 }
 	            else if (state == 1){
+	                if (response == '1'){
+	                    motor = 0;
+	                }
+	                if (response == '2'){
+                        motor = 1;
+                    }
                     printString("Selected motor\r\n");
                     state = 0;
                     //
                 }
                 else if (state == 2){
                     printString("Spinning motor\r\n");
+                    if(response == '1'){
+                        direction = 1;
+                    }
+                    if(response == '2'){
+                        direction = 0;
+                    }
+                    DisableUART();
                     //spin motor
+                    StepMotor(1000, motor, direction);
                     state = 0;
+                    EnableUART();
                     //change motor bit
                 }
 	            response = '\0';

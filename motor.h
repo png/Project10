@@ -169,7 +169,7 @@
 // Function Prototypes
 void InitializeMotorPortPins(void);
 
-void StepMotor(int count);
+void StepMotor(int, int, int);
 
 /*
  *  * This function configures and initializes all of the pins associated with the rotary encoder.

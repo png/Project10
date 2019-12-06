@@ -24,7 +24,7 @@ void InitializeMotorPortPins(void)
     DISABLE_SLEEP_2;
 }
 
-void StepMotor(int count){
+void StepMotor(int count, int motor, int direction){
     //set res, dir, etc.
     SEND_1_RESET;
     CLOSE_RESET;
@@ -35,8 +35,15 @@ void StepMotor(int count){
     MS1_2_LOW;
     MS2_2_LOW;
 
-    DIR_1_HIGH;
-    DIR_2_HIGH;
+    if(direction){
+        DIR_1_HIGH;
+        DIR_2_HIGH;
+    }
+    else{
+        DIR_1_LOW;
+        DIR_2_LOW;
+    }
+
 
     TimeDelay(100, 1000);
 
@@ -47,15 +54,22 @@ void StepMotor(int count){
     //in a loop...
     for(int i = 0; i < count; i++){
         //send step
-        STEP_1_HIGH;
-        STEP_2_HIGH;
-        //wait
-        TimeDelay(1, 800);
-        //close step
-        STEP_1_LOW;
-        STEP_2_LOW;
-        //delay
-        TimeDelay(1, 800);
+        if(motor == 0){
+            STEP_1_HIGH;
+            TimeDelay(1, 800);
+            STEP_1_LOW;
+            TimeDelay(1, 800);
+        }
+        else{
+            STEP_2_HIGH;
+            //wait
+            TimeDelay(1, 800);
+            //close step
+            STEP_1_LOW;
+            STEP_2_LOW;
+            //delay
+            TimeDelay(1, 800);
+        }
     }
 
     //done
