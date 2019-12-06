@@ -11,6 +11,7 @@
 extern int strlen(char*);
 extern int waiting;
 extern int state;
+extern char response;
 // Interrupt handler for port register 1
 #ifdef USING_GNU_COMPILER
 __attribute__((interrupt(PORT1_VECTOR)))
@@ -82,11 +83,9 @@ __interrupt
 #endif
 void USCIAB0RX_ISR(void)
 {
-    char c = UCA0RXBUF;
-    if(c == 'A'){
-        printString("Buffer test");
-    }
-    UCA0TXBUF = UCA0RXBUF; // Fill the TXREG with the RXREG...simple echo back
+    response = UCA0RXBUF;
+    //UCA0TXBUF = UCA0RXBUF; // Fill the TXREG with the RXREG...simple echo back
+    waiting = 0;
     IFG2 &= ~UCA0RXIFG;
 
 }
