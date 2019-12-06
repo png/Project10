@@ -19,7 +19,7 @@ void InitializeUART(){
 
 //    __bis_SR_register(LPM0_bits + GIE);
 
-    UCA0TXBUF = 'A';
+//    UCA0TXBUF = 'A';
 
 }
 

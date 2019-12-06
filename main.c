@@ -1,7 +1,5 @@
 #include <msp430.h>
 #include "timerA.h"
-#include "motor.h"
-#include "UART.h"
 #include "InterruptServiceRoutines.h"
 // Global Variables
 //unsigned int g1msTimer; // Global 1 ms timer used for pushbutton debounce.
@@ -13,6 +11,8 @@
 
 int waiting = 0;
 int state = 0;
+int execute = 1;
+char response = '';
 
 // Function Prototypes
 void ConfigureClockModule();
@@ -55,9 +55,9 @@ int main(void)
 
 	// Loop forever
     //int motor = 0;
-    waitForTX();
+    //waitForTX();
     printString("here!");
-	while(TRUE) {
+	while(execute == 1) {
 	    //StepMotor(10000);
 	    /*
 	     * If waiting == 1, pass.
@@ -66,20 +66,19 @@ int main(void)
 	     * 1 -- Select motor
 	     * 2 -- Spin dir
 	     */
-	    if (waiting == 1){
-	        //pass
-	        //printString("waiting");
-	    }
-	    else{
-	        switch(state){
-	        case 0:
-	            //print guide
-
-	            printString("welcome!");
-	            waiting = 1;
+	    if (waiting == 0){
+	        //print
+	        if (state == 0){
+	            printString("Enter a command - (1) Select motor (2) Spin motor (x) Exit:");
 	        }
+
+	        waiting = 1;
+
 	    }
-	    //TimeDelay(5, 1000);
+	    else if (waiting == 1){
+	        __nop();
+
+	    }
 	}
 	return 0;
 }

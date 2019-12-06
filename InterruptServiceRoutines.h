@@ -1,6 +1,8 @@
 #ifndef INTERRUPTSERVICEROUTINES_H_
 #define INTERRUPTSERVICEROUTINES_H_
 #include <stdio.h>
+#include "motor.h"
+#include "UART.h"
 
 // If you're using the TI compiler, comment out this #define statement
 #define USING_GNU_COMPILER
@@ -52,7 +54,7 @@ __interrupt
 #endif
 void USCIAB0TX_ISR(void)
 {
-    //IFG2 &= ~UCA0TXIFG;
+    IE2 &= ~UCA0TXIE;
 }
 
 void waitForTX(){
@@ -60,11 +62,15 @@ void waitForTX(){
 }
 
 void printString(char * s){
+    IE2 |= UCA0TXIE;
+    char buffer[100];
+    sprintf(buffer, s);
     waitForTX();
     for(int i = 0; i < strlen(s); i++){
         UCA0TXBUF = s[i];
         waitForTX();
     }
+    IE2 &= ~UCA0TXIE;
 }
 
 // Interrupt handler for RX on USCI A and B.
@@ -78,13 +84,10 @@ void USCIAB0RX_ISR(void)
 {
     char c = UCA0RXBUF;
     if(c == 'A'){
-        char buffer[100];
-        sprintf(buffer, "Buffer test\r\n");
-        printString(buffer);
+        printString("Buffer test");
     }
-    //UCA0TXBUF = UCA0RXBUF; // Fill the TXREG with the RXREG...simple echo back
+    UCA0TXBUF = UCA0RXBUF; // Fill the TXREG with the RXREG...simple echo back
     IFG2 &= ~UCA0RXIFG;
-    waiting = 0;
 
 }
 
